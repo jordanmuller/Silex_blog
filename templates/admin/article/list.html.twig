@@ -1,0 +1,37 @@
+{% extends "layout.html.twig" %}
+
+{% block title 'Admin articles' %}
+    
+{% block content %}
+    <h1>Gestion articles</h1>
+    
+    <p><a href="{{ path('admin_article_edit') }}">Ajouter un nouvel article</a></p>
+    
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Titre</th>
+            <th>Chapeau</th>
+            <th>Rubrique</th>
+            <th width="200px"></th>
+        </tr>
+        {% for article in articles %}
+            <tr>
+                <td>{{ article.id }}</td>
+                <td>{{ article.title }}</td>
+                <td>{{ article.header }}</td>
+                {# twig va chercher les getters, il transforme ->getHeader en .header, getCategoryName en .categoryName #}
+                <td>{{ article.categoryName }}</td>
+                <td>
+                    {# syntaxte pour un tableau associatif id: valeur, comme clé => valeur #}
+                    <a href="{{ path('admin_article_edit', {id: article.id}) }}" class="btn btn-primary">
+                        Modifier
+                    </a>
+                    <a href="{{ path('admin_article_delete', {id: article.id}) }}" class="btn btn-danger">
+                        Supprimer
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

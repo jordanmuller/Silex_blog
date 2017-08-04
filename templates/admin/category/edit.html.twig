@@ -1,0 +1,16 @@
+{% extends "layout.html.twig" %}
+
+{% block title 'Edition rubriques' %}
+    
+{% block content %}
+    <h1>{% if category.id %}Modification{% else %} Nouvelle {% endif %} Rubrique</h1>
+    
+    <form method="post">
+        <div class="form-group">
+            <label>Nom</label>
+            <input type="text" name="name" value="{{ category.name }}" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Enregister</button>
+        <a href="{{ path('admin_categories') }}" class="btn btn-default">Annuler</a>
+    </form>
+{% endblock %}

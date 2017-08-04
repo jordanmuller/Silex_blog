@@ -1,0 +1,7 @@
+<ul class="nav navbar-nav">
+    {% for category in categories %}
+        {# Twig reconnait directement category.name même si elle est privée, il va chercher le getter dans la classe Entity\Category #}
+        {# On peut aussi écrire category.getName() #}
+        <li><a>{{ category.name }}</a></li>
+    {% endfor %}
+</ul>

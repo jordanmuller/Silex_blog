@@ -1,0 +1,37 @@
+{% extends "layout.html.twig" %}
+
+{% block title 'Edition articles' %}
+    
+{% block content %}
+    <h1>{% if article.id %}Modification{% else %} Nouvel {% endif %} Article</h1>
+    
+    <form method="post">
+        <div class="form-group">
+            <label>Titre</label>
+            <input type="text" name="title" value="{{ article.title }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Chapeau</label>
+            <textarea name="header" class="form-control">{{ article.header }}</textarea>    
+        </div>
+        <div class="form-group">
+            <label>Contenu</label>
+            <textarea name="content" rows="10" class="form-control">{{ article.content }}</textarea>    
+        </div>
+        <div class="form-group">
+            <label>Rubrique</label>
+            <select name="category" class="form-control">
+                <option value="">Choisissez une rubrique</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}"
+                        {% if category.id == article.categoryId %}selected{% endif %}>
+                        {{ category.name }}</option>
+                {% endfor %}
+            </select>  
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enregister</button>
+        <a href="{{ path('admin_articles') }}" class="btn btn-default">Annuler</a>
+
+    </form>
+{% endblock %}
