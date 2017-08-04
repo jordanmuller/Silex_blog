@@ -55,7 +55,7 @@ class UserController extends ControllerAbstract
             {
                 $errors['password'] = 'Le mot de passe est obligatoire';
             } 
-            elseif (!preg_match('/^[a-zA-Z0-9 -]{6,20}$', $_POST['password']))
+            elseif (!preg_match('/^[a-zA-Z0-9 -]{6,20}$/', $_POST['password']))
             {
                 $errors['password'] = 'Le mot de passe doit faire entre 6 et 20 caractères'
                     . ' et ne contenir que des lettres, des chiffres, ou les '
@@ -70,6 +70,22 @@ class UserController extends ControllerAbstract
             elseif($_POST['password_confirm'] != $_POST['password'])
             {
                 $errors['password-confirm'] = 'La confirmation n\'est pas identique au mot de passe';
+            }
+            
+            if(empty($errors))
+            {
+                // On applique une méthode save, définie dans category.repository qui va se charger de l'enregistrement en bdd 
+                $this->app['user.repository']->save($user);
+
+                // On ajoute un message avant la redirection
+                $this->addFlashMessage('Vous avez été enregistré');
+
+                // Si le formulaire est validé, on redirige l'utilisateur
+                return $this->redirectRoute('admin_articles');
+            } else {
+                $message = '<strong>Le formulaire contient des erreurs</strong>';
+                $message .= '<br>' . implode('<br>', $errors);
+                $this->addFlashMessage($message, 'error');
             }
         }
         

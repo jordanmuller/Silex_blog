@@ -86,7 +86,7 @@ class ArticleController extends ControllerAbstract
                 $this->addFlashMessage('L\'article a été enregistré');
 
                 // Si le formulaire est validé, on redirige l'utilisateur
-                return $this->redirectRoute('admin_articles');
+                return $this->redirectRoute('homepage');
             } else {
                 $message = '<strong>Le formulaire contient des erreurs</strong>';
                 $message .= '<br>' . implode('<br>', $errors);
