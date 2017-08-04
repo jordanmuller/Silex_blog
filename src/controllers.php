@@ -18,6 +18,11 @@ $app
     ->get('/rubrique/liste', 'category.controller:listAction')
     ->bind('category_list')
 ;
+        
+$app
+    ->match('/utilisateur/inscription', 'user.controller:registerAction')
+    ->bind('user_register')
+;
 
 /* ROUTE ADMIN */
 // On crée un groupe de routes grâce à l'indice ['controllers-factory'] prédéfini par Silex
