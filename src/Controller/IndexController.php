@@ -6,6 +6,11 @@ class IndexController extends ControllerAbstract
 { 
     public function indexAction() 
     {
-        return $this->render('index.html.twig');
+        $articles = $this->app['article.repository']->findAll();
+        
+        return $this->render(
+                'index.html.twig',
+                ['articles' =>$articles]
+        );
     }
 }

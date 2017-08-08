@@ -13,6 +13,8 @@
         
     </head>
     <body>
+        {# On appelle la méthode isAdmin() de UserManager, on aurait pu écrire user_manager.isAdmin, on utilise une notation racourcie #}
+        {% if user_manager.admin %}
         <nav class="navbar navbar-inverse">
             <div class="container">
                 <a class="navbar-brand">Menu admin</a>
@@ -26,15 +28,29 @@
                 </ul>
             </div>
         </nav>
+        {% endif %}
         <nav class="navbar navbar-default">
             <div class="container">
                 <a class="navbar-brand" href="{{ path('homepage') }}">Blog</a>    
                 {# Inclus le rendu de la route ici, grâce à la fonction render #}
                 {{ render(url('category_list')) }}
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="{{ path('user_register') }}">Créer un compte</a>
-                    </li>
+                    {% if user_manager.user %} {# si un utilisateur est connecté, .user renvoie à la méthode getUser() de UserManager, cf app.php: global dans twig #}
+                        <li>
+                            {# On utilise la méthode getUserName() de UserManager #}
+                            <a>{{ user_manager.userName}}</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('user_logout') }}">Se déconnecter</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ path('user_register') }}">Créer un compte</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('user_login') }}">Se connecter</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

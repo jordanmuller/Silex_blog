@@ -1,8 +1,11 @@
 <?php
+// Pour utiliser la session de Silex, idem pour Symfony
+
 
 use Controller\CategoryController;
 use Controller\IndexController;
 use Repository\CategoryRepository;
+use Service\UserManager;
 use Silex\Application;
 use Silex\Provider\AssetServiceProvider;
 use Silex\Provider\DoctrineServiceProvider;
@@ -18,7 +21,9 @@ $app->register(new TwigServiceProvider());
 $app->register(new HttpFragmentServiceProvider());
 $app['twig'] = $app->extend('twig', function ($twig, $app) {
     // add custom globals, filters, tags, ...
-
+    // On ajoute une globale à twig, 1er arg : nom de la globale, 2eme arg on lui ajoute en valeur l'instance de notre classe UserManager
+    // pour éccéder au menu UserManager dans les templates twig
+    $twig->addGlobal('user_manager', $app['user.manager']);
     return $twig;
 });
 
@@ -57,6 +62,10 @@ $app['index.controller'] = function() use($app) {
     // On aurait pu écrire global $app; pour éviter le use $app après la fonction
 };
 
+$app['article.controller'] = function() use($app) {
+  return new \Controller\ArticleController($app);  
+};
+
 $app['category.controller'] = function() use($app) {
     return new CategoryController($app);
 };
@@ -85,6 +94,11 @@ $app['category.repository'] = function() use($app) {
 
 $app['article.repository'] = function() use($app) {
   return new \Repository\ArticleRepository($app);  
+};
+
+/* AUTRES SERVICES */
+$app['user.manager'] = function() use($app) {
+    return new UserManager($app['session']);
 };
 
 

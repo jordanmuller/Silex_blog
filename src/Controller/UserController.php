@@ -74,14 +74,16 @@ class UserController extends ControllerAbstract
             
             if(empty($errors))
             {
+                // On encode le mot de passe récupéré dans le formulaire
+                $user->setPassword($this->app['user.manager']->encodePassword($_POST['password']));
                 // On applique une méthode save, définie dans category.repository qui va se charger de l'enregistrement en bdd 
                 $this->app['user.repository']->save($user);
 
                 // On ajoute un message avant la redirection
-                $this->addFlashMessage('Vous avez été enregistré');
+                // $this->addFlashMessage('Vous avez été enregistré');
 
                 // Si le formulaire est validé, on redirige l'utilisateur
-                return $this->redirectRoute('admin_articles');
+                return $this->redirectRoute('homepage');
             } else {
                 $message = '<strong>Le formulaire contient des erreurs</strong>';
                 $message .= '<br>' . implode('<br>', $errors);
@@ -96,4 +98,43 @@ class UserController extends ControllerAbstract
             ]
         );
     }
+    
+    public function loginAction() 
+    {
+        $email = '';
+        
+        if(!empty($_POST))
+        {
+            $email = $_POST['email'];
+            
+            $user = $this->app['user.repository']->findByEmail($email);
+            
+            if(!is_null($user))
+            {
+                // si le mdp du formulaire est identique au mot de passe encodé puis décodé dans la BDD grâce à un getter
+                if($this->app['user.manager']->verifyPassword($_POST['password'], $user->getPassword()))
+                {
+                    $this->app['user.manager']->login($user);
+                    
+                    return $this->redirectRoute('homepage');
+                }
+            }
+            
+            $this->addFlashMessage('Identification incorrecte', 'error');
+        }
+        
+        return $this->render(
+            'user/login.html.twig',
+            // L'email sera pré-rempli dans la page de connexion en cas de retour d'erreur, il devra être réctifié ou le mot de passe
+            ['email' => $email]
+        );
+    }
+    
+    public function logoutAction() 
+    {
+        $this->app['user.manager']->logout();
+        
+        return $this->redirectRoute('homepage');
+    }
+    
 }

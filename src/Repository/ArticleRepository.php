@@ -60,6 +60,34 @@ class ArticleRepository extends RepositoryAbstract
         return $articles;
     }
     
+    public function findByCategory($id)
+    {
+        $query = 'SELECT a.*, c.name FROM article a '
+                . 'JOIN category c ON a.category_id = c.id '
+                . 'WHERE a.category_id = c.id '
+                . 'AND a.category_id = :id';
+        
+        $dbArticlesByCategory = $this->db->fetchAll(
+                $query,
+            [
+                ':id' =>$id
+            ]
+        );   
+        
+        if(!empty($dbArticlesByCategory))
+        {
+            $articlesByCategory = [];
+        
+            foreach($dbArticlesByCategory AS $dbArticleByCategory)
+            {
+                $articleByCategory = $this->buildEntity($dbArticleByCategory);
+
+                $articlesByCategory[] = $articleByCategory;
+            }
+            return $articlesByCategory;
+        }
+    }
+    
     public function find($id) 
     {
         $dbArticle = $this->db->fetchAssoc(

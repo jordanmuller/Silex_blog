@@ -49,7 +49,8 @@ class Article
     public function getCategory() {
         return $this->category;
     }
-
+    
+    // On crée un objet Category
     public function setCategory(Category $category) {
         $this->category = $category;
         return $this;

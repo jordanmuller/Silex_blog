@@ -64,4 +64,14 @@ class User
         $this->role = $role;
         return $this;
     }
+    
+    public function getFullName() 
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+    
+    public function isAdmin() 
+    {
+        return $this->role == 'admin';
+    }
 }

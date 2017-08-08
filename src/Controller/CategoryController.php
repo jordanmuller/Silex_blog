@@ -19,5 +19,24 @@ class CategoryController extends ControllerAbstract
         );
     }
     
-   
+    /*
+     * Faire la page rubriques qui a pour titre le nom de la rubrique
+     * et qui affiche les articles de la rubrique
+     * en utilisant la vue article_list.html
+     */
+    
+    public function indexAction($id) 
+    {
+        $category = $this->app['category.repository']->find($id);
+        $articles = $this->app['article.repository']->findByCategory($id);
+        
+        
+        return $this->render(
+            'category/article_list.html.twig',
+            [
+                'category' => $category,
+                'articles' => $articles
+            ]
+        );
+    }
 }

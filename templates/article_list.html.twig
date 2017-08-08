@@ -1,0 +1,10 @@
+{% for article in articles %}
+    <h2>{{ article.title }} <small>{{ article.categoryName }}</small></h2>
+    <p><b>{{ article.header }}</b></p>
+    
+    <p><a href="{{ path('article_detail', {id: article.id}) }}">Voir la suite</a></p>
+    {# Si ce n'est pas le dernier tour de boucle #}
+    {% if not loop.last %}
+        <hr>
+    {% endif %}
+{% endfor %}

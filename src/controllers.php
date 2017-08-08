@@ -14,19 +14,53 @@ $app
     ->bind('homepage')
 ;
 
+$app 
+    ->get('/article/{id}', 'article.controller:ficheArticle')
+    ->value('id', null) // value() donne une valeur par défaut au paramètre URL id
+    ->bind('article_detail')
+;
+
 $app
     ->get('/rubrique/liste', 'category.controller:listAction')
     ->bind('category_list')
 ;
-        
+
+$app 
+    ->match('/rubrique/articles_liste/{id}', 'category.controller:indexAction')
+    ->value('id', null) // value() donne une valeur par défaut au paramètre URL id
+    ->bind('category_index')
+;
+
+/* USER */
 $app
     ->match('/utilisateur/inscription', 'user.controller:registerAction')
     ->bind('user_register')
 ;
 
+$app
+    ->match('/utilisateur/connexion/', 'user.controller:loginAction')
+    ->bind('user_login')
+;
+
+$app
+    ->match('/utilisateur/deconnexion/', 'user.controller:logoutAction')
+    ->bind('user_logout')
+;
+
 /* ROUTE ADMIN */
 // On crée un groupe de routes grâce à l'indice ['controllers-factory'] prédéfini par Silex
 $admin = $app['controllers_factory'];
+
+/**
+ * Pour toutes les routes du groupe admin,
+ * si on'est pas connecté en admin (role == 'admin'), on se prend une 403
+ */
+$admin->before(function () use($app) {
+   if(!$app['user.manager']->isAdmin())
+   {
+       $app->abort(403, 'Accès refusé');
+   }
+});
 
 // Toutes les routes définies par $admin
 // auront une URL commençant par /admin sans avoir à l'ajouter dans chaque route

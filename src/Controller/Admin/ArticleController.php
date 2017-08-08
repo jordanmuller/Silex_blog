@@ -120,4 +120,5 @@ class ArticleController extends ControllerAbstract
         
         return $this->redirectRoute('admin_articles');
     }
+    
 }
